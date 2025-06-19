@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Navigation from '../components/Navigation';
 import MediaCard from '../components/MediaCard';
 import MediaModal from '../components/MediaModal';
 import { useSearchParams } from 'next/navigation';
 
-export default function VideoGalleryPage() {
+// Separate component that uses useSearchParams
+function VideoGalleryContent() {
   const [videos, setVideos] = useState([]);
   const [filteredVideos, setFilteredVideos] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -228,5 +229,32 @@ export default function VideoGalleryPage() {
         post={selectedVideo}
       />
     </div>
+  );
+}
+
+// Loading fallback component
+function VideoGalleryLoading() {
+  return (
+    <div className="min-h-screen" style={{ backgroundColor: '#fefcf7' }}>
+      <Navigation currentPage="videos" />
+      <div className="pt-24 pb-4 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-3xl font-bold text-gray-800 text-center mb-2">Bus Video Gallery</h1>
+          <div className="w-24 h-1 bg-orange-400 mx-auto rounded-full"></div>
+        </div>
+      </div>
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400"></div>
+      </div>
+    </div>
+  );
+}
+
+// Main page component with Suspense
+export default function VideoGalleryPage() {
+  return (
+    <Suspense fallback={<VideoGalleryLoading />}>
+      <VideoGalleryContent />
+    </Suspense>
   );
 } 
