@@ -6,13 +6,16 @@ import MediaModal from '../components/MediaModal';
 import { useSearchParams } from 'next/navigation';
 
 export default function PhotoGalleryPage() {
-  const searchParams = useSearchParams();
   const [photos, setPhotos] = useState([]);
   const [filteredPhotos, setFilteredPhotos] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Safely get search params after component mounts
+  const searchParams = mounted ? useSearchParams() : null;
 
   const categories = [
     { id: 'all', name: 'All Buses', icon: '🚌' },
@@ -21,6 +24,11 @@ export default function PhotoGalleryPage() {
     { id: 'tata', name: 'Tata', icon: '🟢' },
     { id: 'leyland', name: 'Leyland', icon: '🔶' }
   ];
+
+  // Set mounted to true after component mounts
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -46,16 +54,22 @@ export default function PhotoGalleryPage() {
 
   // Check URL for post parameter and open modal if present
   useEffect(() => {
-    const postId = searchParams.get('post');
-    if (postId) {
-      // Find the photo in the current photos array
-      const photo = photos.find(p => p.airtableId === postId);
-      if (photo) {
-        setSelectedPhoto(photo);
-        setIsModalOpen(true);
+    if (!mounted || !searchParams) return;
+    
+    try {
+      const postId = searchParams.get('post');
+      if (postId) {
+        // Find the photo in the current photos array
+        const photo = photos.find(p => p.airtableId === postId);
+        if (photo) {
+          setSelectedPhoto(photo);
+          setIsModalOpen(true);
+        }
       }
+    } catch (error) {
+      console.error('Error reading search params:', error);
     }
-  }, [searchParams, photos]);
+  }, [mounted, searchParams, photos]);
 
   useEffect(() => {
     if (selectedCategory === 'all') {
