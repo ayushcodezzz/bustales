@@ -28,6 +28,16 @@ const MediaModal = ({ isOpen, onClose, post }) => {
   const videoRef = useRef(null);
   const isMdOrLarger = useIsMdOrLarger();
 
+  // Update currentPost when post prop changes
+  useEffect(() => {
+    if (post) {
+      setCurrentPost(post);
+      setIsVideoPlaying(false);
+      setIsMediaLoaded(false);
+      setLikeCount(post?.likescount || 0);
+    }
+  }, [post]);
+
   // Check URL for post ID on component mount
   useEffect(() => {
     const postId = searchParams.get('post');
