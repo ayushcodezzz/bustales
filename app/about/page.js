@@ -1,13 +1,13 @@
 import React from 'react';
 import { Camera, Globe, Heart, Users, MapPin, Calendar, Star, TrendingUp, Share2 } from 'lucide-react';
 import Navigation from '../components/Navigation';
-import Footer from '../components/Footer';
+import Image from 'next/image';
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-orange-50">
       {/* Navigation */}
-      <Navigation currentPage="about" />
+      <Navigation  />
 
       {/* Hero Section */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-orange-50 to-amber-50">
@@ -40,11 +40,16 @@ export default function AboutPage() {
                   From the vibrant colors of Indian state transport buses to the sleek designs of modern city transit, we document the fascinating world of buses through photography and storytelling.
                 </p>
               </div>
-              <div className="bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl p-8">
-                <div className="text-center">
-                  <div className="text-6xl mb-4">📸</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
-                  <p className="text-gray-700">
+              <div className="relative rounded-2xl overflow-hidden">
+                <Image
+                  src="/images/about.png"
+                  alt="Bus Tales Journey"
+                  width={200}
+                  height={100}
+                  className="object-cover w-full h-full"
+                />
+                <div className="absolute inset-0 bg-black/40 flex items-end justify-center p-8">
+                  <p className="text-white text-md font-bold text-center">
                     Capturing the beauty, diversity, and cultural significance of buses worldwide while building a community of transportation enthusiasts.
                   </p>
                 </div>
@@ -154,9 +159,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <Footer />
 
     </div>
   );

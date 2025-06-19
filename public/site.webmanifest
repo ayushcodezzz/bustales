@@ -1,0 +1,25 @@
+{
+  "name": "Bus Tales - Premium Bus Photography & Stories",
+  "short_name": "Bus Tales",
+  "description": "Discover the fascinating world of buses through stunning photography, detailed specifications, and captivating journey stories.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f59e0b",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["photography", "travel", "transportation"],
+  "lang": "en",
+  "dir": "ltr"
+} 

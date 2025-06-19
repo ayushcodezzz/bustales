@@ -3,6 +3,7 @@ import React from 'react';
 import { Camera, Play, ArrowRight, Star } from 'lucide-react';
 import Button from './Button';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Hero = ({ setCurrentPage }) => {
   return (
@@ -94,12 +95,19 @@ const Hero = ({ setCurrentPage }) => {
               {/* Main Card */}
               <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
                 <div className="bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl p-6 mb-6">
-                  <div className="w-full h-48 bg-gradient-to-br from-amber-200 to-orange-200 rounded-xl flex items-center justify-center">
-                    <Camera size={48} className="text-amber-600" />
+                  <div className="w-full h-64 bg-gradient-to-br from-amber-200 to-orange-200 rounded-xl flex items-center justify-center overflow-hidden">
+                    <Image
+                      src="/images/heropage.png"
+                      alt="Featured Bus - Volvo 9700 Luxury Coach"
+                      width={320}
+                      height={192}
+                      className="object-cover w-full h-full rounded-xl"
+                      priority
+                    />
                   </div>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Featured Bus</h3>
-                <p className="text-gray-600 mb-4">Volvo 9700 Luxury Coach</p>
+                <p className="text-gray-600 mb-4">Volvo 9400 Luxury Coach</p>
                 <div className="flex items-center space-x-2">
                   <div className="flex space-x-1">
                     {[...Array(5)].map((_, i) => (
