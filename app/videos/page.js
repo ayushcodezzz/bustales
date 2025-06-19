@@ -6,13 +6,16 @@ import MediaModal from '../components/MediaModal';
 import { useSearchParams } from 'next/navigation';
 
 export default function VideoGalleryPage() {
-  const searchParams = useSearchParams();
   const [videos, setVideos] = useState([]);
   const [filteredVideos, setFilteredVideos] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Safely get search params after component mounts
+  const searchParams = mounted ? useSearchParams() : null;
 
   const categories = [
     { id: 'all', name: 'All Videos', icon: '🎬' },
@@ -21,6 +24,12 @@ export default function VideoGalleryPage() {
     { id: 'tata', name: 'Tata', icon: '🟢' },
     { id: 'leyland', name: 'Leyland', icon: '🔶' }
   ];
+
+  // Set mounted to true after component mounts
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -45,16 +54,22 @@ export default function VideoGalleryPage() {
 
   // Check URL for post parameter and open modal if present
   useEffect(() => {
-    const postId = searchParams.get('post');
-    if (postId) {
-      // Find the video in the current videos array
-      const video = videos.find(v => v.airtableId === postId);
-      if (video) {
-        setSelectedVideo(video);
-        setIsModalOpen(true);
+    if (!mounted || !searchParams) return;
+    
+    try {
+      const postId = searchParams.get('post');
+      if (postId) {
+        // Find the video in the current videos array
+        const video = videos.find(v => v.airtableId === postId);
+        if (video) {
+          setSelectedVideo(video);
+          setIsModalOpen(true);
+        }
       }
+    } catch (error) {
+      console.error('Error reading search params:', error);
     }
-  }, [searchParams, videos]);
+  }, [mounted, searchParams, videos]);
 
   useEffect(() => {
     if (selectedCategory === 'all') {
