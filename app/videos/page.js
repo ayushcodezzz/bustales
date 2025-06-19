@@ -14,8 +14,8 @@ export default function VideoGalleryPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Safely get search params after component mounts
-  const searchParams = mounted ? useSearchParams() : null;
+  // Always call useSearchParams to follow Rules of Hooks
+  const searchParams = useSearchParams();
 
   const categories = [
     { id: 'all', name: 'All Videos', icon: '🎬' },
@@ -54,10 +54,10 @@ export default function VideoGalleryPage() {
 
   // Check URL for post parameter and open modal if present
   useEffect(() => {
-    if (!mounted || !searchParams) return;
+    if (!mounted) return;
     
     try {
-      const postId = searchParams.get('post');
+      const postId = searchParams?.get('post');
       if (postId) {
         // Find the video in the current videos array
         const video = videos.find(v => v.airtableId === postId);
