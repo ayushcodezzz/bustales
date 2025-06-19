@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import MediaModal from './components/MediaModal';
 import InstagramFeed from './components/InstagramFeed';
 import Hero from './components/Hero';
+import MediaCard from './components/MediaCard';
 import axios from 'axios';
 
 const getCurrentPageKey = () => {
@@ -72,7 +73,16 @@ export default function HomePage() {
       <Navigation currentPage={currentPage} />
       <main className="relative">
         <Hero />
-        <InstagramFeed openModal={handleOpenModal} posts={posts} />
+        <section className="py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">Latest Bus Captures</h2>
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 lg:gap-6">
+              {posts.map((post) => (
+                <MediaCard key={post.airtableId} post={post} onClick={handleOpenModal} />
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
       <MediaModal
