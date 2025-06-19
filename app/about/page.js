@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-orange-50">
+    <div className="min-h-[100dvh] bg-orange-50">
       {/* Navigation */}
       <Navigation  />
 

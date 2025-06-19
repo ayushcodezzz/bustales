@@ -99,7 +99,7 @@ function PhotoGalleryContent() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#fefcf7' }}>
+    <div className="min-h-[100dvh]" style={{ backgroundColor: '#fefcf7' }}>
       <Navigation currentPage="bus-gallery" />
       
       {/* Simple Header */}
@@ -235,7 +235,7 @@ function PhotoGalleryContent() {
 // Loading fallback component
 function PhotoGalleryLoading() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#fefcf7' }}>
+    <div className="min-h-[100dvh]" style={{ backgroundColor: '#fefcf7' }}>
       <Navigation currentPage="bus-gallery" />
       <div className="pt-24 pb-4 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">

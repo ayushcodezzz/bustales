@@ -99,7 +99,7 @@ function VideoGalleryContent() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#fefcf7' }}>
+    <div className="min-h-[100dvh]" style={{ backgroundColor: '#fefcf7' }}>
       <Navigation currentPage="videos" />
       
       {/* Simple Header */}
@@ -235,7 +235,7 @@ function VideoGalleryContent() {
 // Loading fallback component
 function VideoGalleryLoading() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#fefcf7' }}>
+    <div className="min-h-[100dvh]" style={{ backgroundColor: '#fefcf7' }}>
       <Navigation currentPage="videos" />
       <div className="pt-24 pb-4 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
