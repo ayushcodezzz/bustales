@@ -8,8 +8,8 @@ const VideoCard = ({ post, onClick }) => (
   >
     <div className="aspect-w-9 aspect-h-16 relative">
       <Image
-        src={post.thumbnailUrl || '/images/placeholder.jpg'}
-        alt={post.caption || 'Video thumbnail'}
+        src={post.videothumbnail || post.thumbnails?.[0]?.thumbnails?.full || post.thumbnail || '/images/placeholder.jpg'}
+        alt={post.caption || post.title || post.description || 'Video thumbnail'}
         fill
         className="object-cover"
       />
@@ -23,7 +23,7 @@ const VideoCard = ({ post, onClick }) => (
     </div>
     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300">
       <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-all duration-300">
-        <p className="text-sm font-medium">{post.caption}</p>
+        <p className="text-sm font-medium">{post.caption || post.title || post.description}</p>
         <p className="text-xs mt-1">Click to play video</p>
       </div>
     </div>

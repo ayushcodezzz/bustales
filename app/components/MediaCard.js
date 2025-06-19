@@ -12,7 +12,6 @@ const MediaCard = ({ post, onClick }) => {
         return null;
       }
       
-      
       const imageObj = imageArray[0];
       if (!imageObj) return null;
       
@@ -41,26 +40,17 @@ const MediaCard = ({ post, onClick }) => {
     }
 
     // Get the best available image URL from Airtable data
-    let finalImageUrl = '/images/placeholder.jpg';
+    let finalImageUrl = '';
     
     if (post.type === 'video') {
-      finalImageUrl = post.videoUrl || getImageUrl(post.image) || '/images/placeholder.jpg';
+      finalImageUrl = post.thumbnails?.[0]?.thumbnails?.full?.url;
     } else {
-      finalImageUrl = getImageUrl(post.image) || '/images/placeholder.jpg';
+      const imageThumbnail = getImageUrl(post.image);
+      finalImageUrl = imageThumbnail;
     }
     
     return finalImageUrl;
-  }, [post.image, post.type, post.videoUrl]);
-
-  // Only log debug info in development and limit frequency
-  useMemo(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('MediaCard Debug for Post ID:', post.id);
-      console.log('Post Type:', post.type);
-      console.log('Selected imageUrl:', imageUrl);
-      console.log('Has valid Airtable URL:', imageUrl.includes('airtableusercontent.com'));
-    }
-  }, [post.id, post.type, imageUrl]);
+  }, [post.image, post.type, post.thumbnails]);
 
   // Handle image error with useCallback to prevent re-renders
   const handleImageError = useCallback(() => {
@@ -68,9 +58,8 @@ const MediaCard = ({ post, onClick }) => {
     setImageError(true);
   }, [imageUrl]);
 
-  // Use placeholder if there's an error
-  const finalImageUrl = imageError ? '/images/placeholder.jpg' : imageUrl;
-  const isAirtableImage = finalImageUrl.includes('airtableusercontent.com');
+  // Use error state to determine final URL
+  const finalImageUrl = imageError ? null : imageUrl;
 
   return (
     <div
@@ -79,19 +68,15 @@ const MediaCard = ({ post, onClick }) => {
     >
       <div className="relative w-full aspect-[4/5]">
         <Image
-          src={finalImageUrl}
+          src={finalImageUrl || null}
           alt={post.type === 'video' ? 'Video thumbnail' : 'Bus photo'}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover rounded-t-lg"
           onError={handleImageError}
-          // Use unoptimized for Airtable images to avoid Next.js optimization issues
-          unoptimized={isAirtableImage}
           priority={false}
-          // Add loading strategy
           loading="lazy"
-          // Add quality setting for better performance
-          quality={isAirtableImage ? 100 : 75}
+          quality={75}
         />
         {post.type === 'video' && (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -106,7 +91,7 @@ const MediaCard = ({ post, onClick }) => {
       {/* Always show the caption at the bottom, no hover overlays, no zoom */}
       <div className="p-2 sm:p-3 md:p-4">
         <div className="font-semibold text-xs sm:text-base md:text-lg lg:text-xl text-gray-900 truncate leading-tight">
-          {post.caption || 'No caption'}
+          {post.caption || post.title || post.description || 'No caption'}
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { X, Play, Pause } from 'lucide-react';
 import axios from 'axios';
 import Button from './Button';
 import SafeHtml from '../helpers/SafeHtml';
@@ -24,6 +24,8 @@ const MediaModal = ({ isOpen, onClose, post }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post?.likescount || 0);
   const [currentPost, setCurrentPost] = useState(post);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = useRef(null);
   const isMdOrLarger = useIsMdOrLarger();
 
   // Check URL for post ID on component mount
@@ -85,6 +87,24 @@ const MediaModal = ({ isOpen, onClose, post }) => {
     }
   }, [isOpen, currentPost]);
 
+  // Auto-start video when modal opens
+  useEffect(() => {
+    if (isOpen && currentPost?.type === 'video' && videoRef.current) {
+      // Small delay to ensure video is ready
+      const timer = setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.play().then(() => {
+            setIsVideoPlaying(true);
+          }).catch(error => {
+            console.log('Auto-play failed:', error);
+          });
+        }
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, currentPost]);
+
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -94,15 +114,36 @@ const MediaModal = ({ isOpen, onClose, post }) => {
     } else {
       document.body.style.overflow = 'unset';
     }
-    console.log(currentPost)
+    console.log('Current post data:', currentPost);
+    console.log('Post fields:', currentPost ? Object.keys(currentPost) : 'No post');
     // Cleanup on unmount
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, currentPost]);
 
   const handleMediaLoad = () => {
     setIsMediaLoaded(true);
+  };
+
+  const handleVideoClick = () => {
+    if (videoRef.current) {
+      if (isVideoPlaying) {
+        videoRef.current.pause();
+        setIsVideoPlaying(false);
+      } else {
+        videoRef.current.play();
+        setIsVideoPlaying(true);
+      }
+    }
+  };
+
+  const handleVideoPlay = () => {
+    setIsVideoPlaying(true);
+  };
+
+  const handleVideoPause = () => {
+    setIsVideoPlaying(false);
   };
 
   const handleClose = () => {
@@ -202,19 +243,33 @@ const MediaModal = ({ isOpen, onClose, post }) => {
         )}
         
         {/* Left side - Media */}
-        <div className=" bg-blur bg-black flex items-center justify-center">
+        <div className="bg-black flex items-center justify-center relative">
           {displayPost.type === 'video' ? (
-            <video
-              src={displayPost.videoUrl}
-              controls
-              className="max-w-full max-h-full object-contain"
-              poster={displayPost.thumbnailUrl}
-              onLoadedData={handleMediaLoad}
-            />
+            <div className="relative w-full h-full flex items-center justify-center">
+              <video
+                ref={videoRef}
+                src={displayPost.videoUrl || displayPost.video || displayPost.image[0].url}
+                poster={displayPost.videothumbnail || displayPost.thumbnails[0].thumbnails.full}
+                onLoadedData={handleMediaLoad}
+                onPlay={handleVideoPlay}
+                onPause={handleVideoPause}
+                className="max-w-full max-h-full object-contain cursor-pointer"
+                onClick={handleVideoClick}
+              />
+              {/* Custom play/pause button overlay */}
+              <div 
+                className="absolute inset-0 flex items-center justify-center cursor-pointer"
+                onClick={handleVideoClick}
+              >
+                {!isVideoPlaying && (
+                  <Play size={60} color="white" />
+                )}
+              </div>
+            </div>
           ) : (
             <img
               src={displayPost.image[0].url}
-              alt={displayPost.caption}
+              alt={displayPost.caption || displayPost.title || 'Image'}
               className="max-w-full max-h-full object-cover"
               onLoad={handleMediaLoad}
             />
@@ -237,8 +292,8 @@ const MediaModal = ({ isOpen, onClose, post }) => {
           <div className="flex-1 p-4 overflow-y-auto">
             <div className="flex items-start mb-4">
               <div className="flex-1">
-                {displayPost.fullcaption && (
-                  <SafeHtml html={displayPost.fullcaption} />
+                {(displayPost.fullcaption || displayPost.description || displayPost.caption) && (
+                  <SafeHtml html={displayPost.fullcaption || displayPost.description || displayPost.caption} />
                 )}
               </div>
             </div>

@@ -121,16 +121,16 @@ const MediaFullPage = ({ post, onClose }) => {
               
               {post.type === 'video' ? (
                 <video
-                  src={post.videoUrl}
+                  src={post.videoUrl || post.video || post.url}
                   controls
                   className="w-full shadow-lg"
-                  poster={post.thumbnailUrl}
+                  poster={post.videothumbnail || post.thumbnails?.[0]?.thumbnails?.full || post.thumbnail}
                   onLoadedData={handleMediaLoad}
                 />
               ) : (
                 <img
                   src={post.image[0].url}
-                  alt={post.caption}
+                  alt={post.caption || post.title || 'Image'}
                   className="w-full shadow-lg"
                   onLoad={handleMediaLoad}
                 />
@@ -157,10 +157,10 @@ const MediaFullPage = ({ post, onClose }) => {
 
             {/* Caption and details */}
             <div className="w-full max-w-2xl space-y-6">
-              {post.fullcaption && (
+              {(post.fullcaption || post.description || post.caption) && (
                 <div className="px-2">
                   <div className="prose prose-sm max-w-none">
-                    <SafeHtml html={post.fullcaption} />
+                    <SafeHtml html={post.fullcaption || post.description || post.caption} />
                   </div>
                 </div>
               )}
