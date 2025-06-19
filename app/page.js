@@ -6,7 +6,6 @@ import MediaModal from './components/MediaModal';
 import InstagramFeed from './components/InstagramFeed';
 import Hero from './components/Hero';
 import axios from 'axios';
-import { useSearchParams } from 'next/navigation';
 
 const getCurrentPageKey = () => {
   if (typeof window === 'undefined') return 'home';
@@ -20,7 +19,6 @@ const getCurrentPageKey = () => {
 };
 
 export default function HomePage() {
-  const searchParams = useSearchParams();
   const [selectedPost, setSelectedPost] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -46,19 +44,16 @@ export default function HomePage() {
     };
     fetchPosts();
   }, []);
-
-  // Check URL for post parameter and open modal if present
   useEffect(() => {
-    const postId = searchParams.get('post');
+    const postId = new URLSearchParams(window.location.search).get('post');
     if (postId) {
-      // Find the post in the current posts array
       const post = posts.find(p => p.airtableId === postId);
       if (post) {
         setSelectedPost(post);
         setIsModalOpen(true);
       }
     }
-  }, [searchParams, posts]);
+  }, [posts]);
 
   const handleOpenModal = (post) => {
     setSelectedPost(post);
