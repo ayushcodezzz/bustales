@@ -18,14 +18,14 @@ const SafeHtml = ({ html, className = '' }) => {
         [&>figure>a]:mx-auto [&>figure>a]:block [&>figure>a]:text-center
         [&>figure>a>div]:mx-auto [&>figure>a>div]:block [&>figure>a>div]:text-center
         [&>figure>a>div>img]:mx-auto [&>figure>a>div>img]:block [&>figure>a>div>img]:max-w-full [&>figure>a>div>img]:h-auto [&>figure>a>div>img]:rounded-lg
-        [&>h1]:text-[24px] [&>h1]:font-bold [&>h1]:mb-4 [&>h1]:mt-6 [&>h1]:text-gray-900 [&>h1]:leading-[32px]
-        [&>h1>a]:text-blue-600 [&>h1>a]:hover:text-blue-700 [&>h1>a]:no-underline [&>h1>a]:hover:underline
-        [&>h2]:text-[20px] [&>h2]:font-bold [&>h2]:mb-3 [&>h2]:mt-5 [&>h2]:text-gray-900 [&>h2]:leading-[28px]
-        [&>h2>a]:text-blue-600 [&>h2>a]:hover:text-blue-700 [&>h2>a]:no-underline [&>h2>a]:hover:underline
-        [&>h3]:text-[17px] [&>h3]:font-semibold [&>h3]:mb-3 [&>h3]:mt-4 [&>h3]:text-gray-900 [&>h3]:leading-[24px]
-        [&>h3>a]:text-blue-600 [&>h3>a]:hover:text-blue-700 [&>h3>a]:no-underline [&>h3>a]:hover:underline
-        [&>h4]:text-[15px] [&>h4]:font-semibold [&>h4]:mb-2 [&>h4]:mt-3 [&>h4]:text-gray-900 [&>h4]:leading-[20px]
-        [&>h4>a]:text-blue-600 [&>h4>a]:hover:text-blue-700 [&>h4>a]:no-underline [&>h4>a]:hover:underline
+        [&>h1]:text-[24px] [&>h1]:font-bold [&>h1]:mb-4 [&>h1]:mt-6 [&>h1]:leading-[32px]
+        [&>h1>a]:no-underline [&>h1>a]:hover:underline
+        [&>h2]:text-[20px] [&>h2]:font-bold [&>h2]:mb-3 [&>h2]:mt-5 [&>h2]:leading-[28px]
+        [&>h2>a]:no-underline [&>h2>a]:hover:underline
+        [&>h3]:text-[17px] [&>h3]:font-semibold [&>h3]:mb-3 [&>h3]:mt-4 [&>h3]:leading-[24px]
+        [&>h3>a]:no-underline [&>h3>a]:hover:underline
+        [&>h4]:text-[15px] [&>h4]:font-semibold [&>h4]:mb-2 [&>h4]:mt-3 [&>h4]:leading-[20px]
+        [&>h4>a]:no-underline [&>h4>a]:hover:underline
         ${className}
       `}
       dangerouslySetInnerHTML={{ __html: html }}
