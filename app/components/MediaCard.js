@@ -43,7 +43,25 @@ const MediaCard = ({ post, onClick }) => {
     let finalImageUrl = '';
     
     if (post.type === 'video') {
-      finalImageUrl = post.thumbnails?.[0]?.thumbnails?.full?.url;
+      // For videos, try to get thumbnail from thumbnails array first
+      if (post.thumbnails && post.thumbnails.length > 0) {
+        const thumbnail = post.thumbnails[0];
+        if (thumbnail.thumbnails?.full?.url) {
+          finalImageUrl = thumbnail.thumbnails.full.url;
+        } else if (thumbnail.thumbnails?.large?.url) {
+          finalImageUrl = thumbnail.thumbnails.large.url;
+        } else if (thumbnail.thumbnails?.small?.url) {
+          finalImageUrl = thumbnail.thumbnails.small.url;
+        } else if (thumbnail.url) {
+          finalImageUrl = thumbnail.url;
+        }
+      }
+      
+      // If no thumbnail found, try the image array (which might contain video thumbnail)
+      if (!finalImageUrl && post.image && post.image.length > 0) {
+        const imageThumbnail = getImageUrl(post.image);
+        finalImageUrl = imageThumbnail;
+      }
     } else {
       const imageThumbnail = getImageUrl(post.image);
       finalImageUrl = imageThumbnail;

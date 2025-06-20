@@ -37,10 +37,17 @@ function VideoGalleryContent() {
         setLoading(true);
         const res = await fetch('/api/bustales');
         const data = await res.json();
+        console.log('API Response:', data);
         if (data && data.records) {
+          console.log('Total records:', data.records.length);
+          console.log('Record types:', data.records.map(r => r.fields?.type));
+          
           const filtered = data.records
             .map((r) => ({ ...r.fields, airtableId: r.id }))
             .filter((item) => item.type === 'video');
+          console.log('Filtered videos:', filtered);
+          console.log('Video count:', filtered.length);
+          
           setVideos(filtered);
           setFilteredVideos(filtered);
         }

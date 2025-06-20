@@ -31,6 +31,7 @@ const MediaModal = ({ isOpen, onClose, post }) => {
   // Update currentPost when post prop changes
   useEffect(() => {
     if (post) {
+      console.log('MediaModal received post:', post);
       setCurrentPost(post);
       setIsVideoPlaying(false);
       setIsMediaLoaded(false);
@@ -258,13 +259,14 @@ const MediaModal = ({ isOpen, onClose, post }) => {
             <div className="relative w-full h-full flex items-center justify-center">
               <video
                 ref={videoRef}
-                src={displayPost.videoUrl || displayPost.video || displayPost.image[0].url}
-                poster={displayPost.videothumbnail || displayPost.thumbnails[0].thumbnails.full}
+                src={displayPost.image?.[0]?.url || displayPost.videoUrl || displayPost.video}
+                poster={displayPost.thumbnails?.[0]?.thumbnails?.full?.url || displayPost.videothumbnail || displayPost.thumbnails?.[0]?.thumbnails?.large?.url}
                 onLoadedData={handleMediaLoad}
                 onPlay={handleVideoPlay}
                 onPause={handleVideoPause}
                 className="max-w-full max-h-full object-contain cursor-pointer"
                 onClick={handleVideoClick}
+                controls
               />
               {/* Custom play/pause button overlay */}
               <div 
